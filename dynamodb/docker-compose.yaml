@@ -1,0 +1,22 @@
+version: '3.4'
+
+services:
+
+  app:
+    image: python:3.9.4-alpine
+    container_name: app
+    hostname: app
+    networks:
+      - perf
+    restart: "no"
+    volumes:
+        - type: bind
+          source: ./app
+          target: /app
+    command: sh -c "pip3 install boto3 && python /app/app.py"
+    environment:
+      - REDIS_HOST=$REDIS_HOST
+      - REDIS_PORT=$REDIS_PORT
+
+networks:
+  perf:

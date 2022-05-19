@@ -1,0 +1,25 @@
+#!/bin/bash
+dockers_running=$(docker ps -q)
+if [ ! -z $dockers_running ]; then
+    docker kill $dockers_running
+fi
+
+all_dockers=$(docker ps -aq)
+if [ ! -z "$all_dockers" ]; then
+    docker rm $all_dockers
+fi
+
+all_images=$(docker image ls -q)
+if [ ! -z "$all_images" ]; then
+    docker image rm $all_images
+fi
+
+all_volumes=$(docker volume ls -q)
+if [ ! -z "$all_volumes" ]; then
+    docker volume rm $all_volumes
+fi
+
+bridge_networks=$(docker network ls -f driver=bridge -q)
+if [ ! -z "$bridge_networks" ]; then
+    docker network rm $bridge_networks
+fi
