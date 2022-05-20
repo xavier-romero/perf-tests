@@ -19,11 +19,20 @@ services:
       - REDIS_PORT=$REDIS_PORT
     depends_on:
       - redis
+      - keydb
 
   redis:
     image: redis
     container_name: redis
     hostname: redis
+    networks:
+      - perf
+
+  keydb:
+    image: eqalpha/keydb
+    container_name: keydb
+    hostname: keydb
+    command: keydb-server /etc/keydb/keydb.conf --server-threads 4
     networks:
       - perf
 
