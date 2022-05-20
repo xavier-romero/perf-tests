@@ -1,0 +1,38 @@
+version: '3.4'
+
+services:
+
+  app:
+    image: python:3.8-alpine
+    container_name: app
+    hostname: app
+    networks:
+      - perf
+    restart: "no"
+    volumes:
+        - type: bind
+          source: ./app
+          target: /app
+    command: sh -c "pip3 install psycopg2-binary && sleep 5 && python /app/app.py"
+    environment:
+      POSTGRES_HOST: postgres
+      POSTGRES_PASSWORD: secret
+      POSTGRES_USER: u
+      POSTGRES_DB: db
+    depends_on:
+      - postgres
+
+  postgres:
+    image: postgres
+    container_name: postgres
+    hostname: postgres
+    environment:
+      POSTGRES_PASSWORD: secret
+      POSTGRES_USER: u
+      POSTGRES_DB: db
+    networks:
+      - perf
+
+
+networks:
+  perf:
