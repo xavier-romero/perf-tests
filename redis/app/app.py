@@ -39,8 +39,8 @@ for step in steps:
     # STORE KEYS AND VALUES
     t = time.time()
     for k, v in zip(ks, vs):
-        K = ''.join([bin(x)[2:].zfill(512) for x in k])
-        V = ''.join([bin(y)[2:].zfill(512) for y in v])
+        K = ''.join([bin(x)[2:].zfill(512) for x in k])  # bin repr 2048 chars
+        V = ''.join([bin(y)[2:].zfill(512) for y in v])  # bin repr 6144 chars
         r.set(K, V)
 
     delta = time.time() - t
