@@ -12,8 +12,8 @@ steps = [5000, 15000, 30000]
 conn = psycopg2.connect(host=host, database=db, user=user, password=passw)
 command = """
     CREATE TABLE kv (
-        k VARCHAR(2048) PRIMARY KEY,
-        v VARCHAR(20480) NOT NULL
+        k VARCHAR(256) PRIMARY KEY,
+        v VARCHAR(768) NOT NULL
     )
     """
 cur = conn.cursor()
@@ -50,8 +50,8 @@ for step in steps:
     # STORE KEYS AND VALUES
     t = time.time()
     for k, v in zip(ks, vs):
-        K = ''.join([bin(x)[2:].zfill(512) for x in k])
-        V = ''.join([bin(y)[2:].zfill(512) for y in v])
+        K = ''.join([bin(x)[2:].zfill(64) for x in k])
+        V = ''.join([bin(y)[2:].zfill(64) for y in v])
         sql = """INSERT INTO kv(k, v) VALUES(%s, %s);"""
         cur.execute(sql, (K, V))
     conn.commit()
@@ -63,12 +63,12 @@ for step in steps:
     # RETRIEVE KEYS AND VALUES
     t = time.time()
     for k, orig_v in zip(ks, vs):
-        K = ''.join([bin(x)[2:].zfill(512) for x in k])
+        K = ''.join([bin(x)[2:].zfill(64) for x in k])
         sql = """SELECT v from kv where k=%s;"""
         cur.execute(sql, (K,))
         V = cur.fetchone()[0]
 
-        v = [int(x, 2) for x in list(map(''.join, zip(*[iter(V)]*512)))]
+        v = [int(x, 2) for x in list(map(''.join, zip(*[iter(V)]*64)))]
         try:
             assert(v == orig_v)
         except AssertionError:
@@ -82,7 +82,7 @@ for step in steps:
     # DELETE KEYS AND VALUES
     t = time.time()
     for k in ks:
-        K = ''.join([bin(x)[2:].zfill(512) for x in k])
+        K = ''.join([bin(x)[2:].zfill(64) for x in k])
         sql = """delete from kv where k=%s;"""
         cur.execute(sql, (K,))
     conn.commit()

@@ -39,8 +39,8 @@ for step in steps:
     # STORE KEYS AND VALUES
     t = time.time()
     for k, v in zip(ks, vs):
-        K = ''.join([bin(x)[2:].zfill(512) for x in k])  # bin repr 2048 chars
-        V = ''.join([bin(y)[2:].zfill(512) for y in v])  # bin repr 6144 chars
+        K = ''.join([bin(x)[2:].zfill(64) for x in k])  # bin repr 256 chars
+        V = ''.join([bin(y)[2:].zfill(64) for y in v])  # bin repr 768 chars
         r.set(K, V)
 
     delta = time.time() - t
@@ -50,9 +50,9 @@ for step in steps:
     # RETRIEVE KEYS AND VALUES
     t = time.time()
     for k, orig_v in zip(ks, vs):
-        K = ''.join([bin(x)[2:].zfill(512) for x in k])
+        K = ''.join([bin(x)[2:].zfill(64) for x in k])
         V = r.get(K).decode()
-        v = [int(x, 2) for x in list(map(''.join, zip(*[iter(V)]*512)))]
+        v = [int(x, 2) for x in list(map(''.join, zip(*[iter(V)]*64)))]
         try:
             assert(v == orig_v)
         except AssertionError:
@@ -66,7 +66,7 @@ for step in steps:
     # DELETE KEYS AND VALUES
     t = time.time()
     for k in ks:
-        K = ''.join([bin(x)[2:].zfill(512) for x in k])
+        K = ''.join([bin(x)[2:].zfill(64) for x in k])
         r.delete(K)
 
     delta = time.time() - t
