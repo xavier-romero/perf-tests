@@ -77,7 +77,7 @@ for step in steps:
 
     delta = time.time() - t
     print(f'RETRIEVAL OF {len(ks)} TOOK {delta:.3f}s '
-        f'({int(step/delta)} op/s)', flush=True)
+          f'({int(step/delta)} op/s)', flush=True)
 
     # DELETE KEYS AND VALUES
     t = time.time()
@@ -89,7 +89,7 @@ for step in steps:
 
     delta = time.time() - t
     print(f'REMOVAL OF {len(ks)} TOOK {delta:.3f}s '
-        f'({int(step/delta)} op/s)', flush=True)
+          f'({int(step/delta)} op/s)', flush=True)
 
     # END
     print(f':: END STEP {step}')
