@@ -13,7 +13,7 @@ services:
         - type: bind
           source: ./app
           target: /app
-    command: sh -c "pip3 install psycopg2-binary && sleep 5 && python /app/app-big.py"
+    command: sh -c "pip3 install psycopg2-binary && sleep 5 && python /app/app-big-str.py"
     environment:
       POSTGRES_HOST: postgres
       POSTGRES_PASSWORD: secret
