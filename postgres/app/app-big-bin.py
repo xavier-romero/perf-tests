@@ -22,7 +22,7 @@ read_report_step = 10
 conn = psycopg2.connect(host=host, database=db, user=user, password=passw)
 command = """
     CREATE TABLE kv (
-        k bytea,
+        k bytea PRIMARY KEY,
         v bytea
     )
     """

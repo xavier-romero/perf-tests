@@ -17,7 +17,7 @@ read_test_size = int(test_size / 10)
 
 write_report_step = 40960  # each 5MB of data, 1MB = 8192 iterations
 delete_report_step = 40960
-read_report_step = 10
+read_report_step = 20480
 
 conn = psycopg2.connect(host=host, database=db, user=user, password=passw)
 command = """
@@ -27,32 +27,32 @@ command = """
     )
     """
 cur = conn.cursor()
-cur.execute(command)
-conn.commit()
+# cur.execute(command)
+# conn.commit()
 
 # INITIALIZE KEYS AND VALUES
-print(f"WRITE | TEST_SIZE: {test_size} | REPORT_STEP: {write_report_step}")
-start = time.time()
-t = start
-for i in range(test_size):
-    i_bin = bin(i)[2:].zfill(64)
-    k = ''.join(i_bin for _ in range(4))
-    v = ''.join(i_bin for _ in range(12))
-    sql = """INSERT INTO kv(k, v) VALUES(%s, %s);"""
-    cur.execute(sql, (k, v))
-    if i and i % write_report_step == 0:
-        conn.commit()
-        delta = time.time() - t
-        total_time = time.time() - start
-        print(
-            f'Partial of {write_report_step} took {delta:.3f} '
-            f'({int(write_report_step/delta)}op/s). '
-            f'TOTAL: {i} ({int((i*128)/1024/1024)}MB), '
-            f'Avg of {int(i/total_time)}op/s.',
-            flush=True
-        )
-        t = time.time()
-conn.commit()
+# print(f"WRITE | TEST_SIZE: {test_size} | REPORT_STEP: {write_report_step}")
+# start = time.time()
+# t = start
+# for i in range(test_size):
+#     i_bin = bin(i)[2:].zfill(64)
+#     k = ''.join(i_bin for _ in range(4))
+#     v = ''.join(i_bin for _ in range(12))
+#     sql = """INSERT INTO kv(k, v) VALUES(%s, %s);"""
+#     cur.execute(sql, (k, v))
+#     if i and i % write_report_step == 0:
+#         conn.commit()
+#         delta = time.time() - t
+#         total_time = time.time() - start
+#         print(
+#             f'Partial of {write_report_step} took {delta:.3f} '
+#             f'({int(write_report_step/delta)}op/s). '
+#             f'TOTAL: {i} ({int((i*128)/1024/1024)}MB), '
+#             f'Avg of {int(i/total_time)}op/s.',
+#             flush=True
+#         )
+#         t = time.time()
+# conn.commit()
 
 # RETRIEVE KEYS AND VALUES
 print(f"READ | TEST SIZE: {read_test_size} | REPORT STEP: {read_report_step}")
