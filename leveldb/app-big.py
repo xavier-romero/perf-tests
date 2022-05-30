@@ -6,7 +6,7 @@ import time
 db = plyvel.DB('/tmp/testdb/', create_if_missing=True)
 
 # test_size_kbytes = 1024 * 1024 * 1
-test_size_kbytes = 1024 * 64
+test_size_kbytes = 1024 * 1024 * 2
 
 # k = 4 * 8 = 32 bytes, v = 12 * 8 = 96 bytes, total = 128 bytes
 test_size = int((test_size_kbytes * 1024) / 128)
@@ -51,7 +51,7 @@ for i in range(read_test_size):
         my_64bits + my_64bits + my_64bits + my_64bits + \
         my_64bits + my_64bits + my_64bits + my_64bits
 
-    v = db.get(k).decode()
+    v = db.get(k)
     assert(v == expected_v)
 
     if i and i % read_report_step == 0:
